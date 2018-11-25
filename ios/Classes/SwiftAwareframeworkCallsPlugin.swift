@@ -32,22 +32,15 @@ public class SwiftAwareframeworkCallsPlugin: AwareFlutterPluginCore, FlutterPlug
     public static func register(with registrar: FlutterPluginRegistrar) {
         
         let instance = SwiftAwareframeworkCallsPlugin()
-        // add own channel
-        super.setChannels(with: registrar,
-                          instance: instance,
-                          methodChannelName: "awareframework_calls/method",
-                          eventChannelName: "awareframework_calls/event")
-
-        let onCallStream    = FlutterEventChannel(name: "awareframework_calls/event_on_call",    binaryMessenger: registrar.messenger())
-        let onRingingStream = FlutterEventChannel(name: "awareframework_calls/event_on_ringing", binaryMessenger: registrar.messenger())
-        let onBusyStream    = FlutterEventChannel(name: "awareframework_calls/event_on_busy",    binaryMessenger: registrar.messenger())
-        let onFreeStream    = FlutterEventChannel(name: "awareframework_calls/event_on_free",    binaryMessenger: registrar.messenger())
+        super.setMethodChannel(with: registrar, instance: instance, channelName: "awareframework_calls/method")
         
-        onCallStream.setStreamHandler(instance)
-        onRingingStream.setStreamHandler(instance)
-        onBusyStream.setStreamHandler(instance)
-        onFreeStream.setStreamHandler(instance)
-        
+        super.setEventChannels(with: registrar, instance: instance, channelNames: [
+                                                                "awareframework_calls/event",
+                                                                "awareframework_calls/event_on_call",
+                                                                "awareframework_calls/event_on_ringing",
+                                                                "awareframework_calls/event_on_busy",
+                                                                "awareframework_calls/event_on_free"
+                                                            ])
     }
 
     

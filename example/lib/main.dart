@@ -26,6 +26,8 @@ class _MyAppState extends State<MyApp> {
 
     sensor = new CallsSensor(config);
 
+    sensor.start();
+
   }
 
   @override

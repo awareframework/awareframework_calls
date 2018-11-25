@@ -19,31 +19,29 @@ class CallsSensor extends AwareSensorCore {
   CallsSensor(CallsSensorConfig config):this.convenience(config);
   CallsSensor.convenience(config) : super(config){
     /// Set sensor method & event channels
-    super.setSensorChannels(_callsMethod, _callsStream);
+    super.setMethodChannel(_callsMethod);
   }
 
 //  /// A sensor observer instance
-  Stream<Map<String,dynamic>> get onCall {
-    return _onCallStream.receiveBroadcastStream(["on_call"]).map((dynamic event) => Map<String,dynamic>.from(event));
+  Stream<Map<String,dynamic>> onCall(String id) {
+    return super.getBroadcastStream(_onCallStream, "on_call", id).map((dynamic event) => Map<String,dynamic>.from(event));
   }
 
-  Stream<dynamic> get onRinging {
-    return _onRingingStream.receiveBroadcastStream(["on_ringing"]);
+  Stream<dynamic> onRinging(String id) {
+    return super.getBroadcastStream(_onRingingStream, "on_ringing", id);
   }
 
-  Stream<dynamic> get onBusy {
-    return _onBusyStream.receiveBroadcastStream(["on_busy"]);
+  Stream<dynamic> onBusy(String id) {
+    return super.getBroadcastStream(_onBusyStream, "on_busy", id);
   }
 
-  Stream<dynamic> get onFree {
-    return _onFreeStream.receiveBroadcastStream(["on_free"]);
+  Stream<dynamic> onFree(String id) {
+    return super.getBroadcastStream(_onFreeStream, "on_free", id);
   }
 }
 
 class CallsSensorConfig extends AwareSensorConfig{
   CallsSensorConfig();
-
-  /// TODO
 
   @override
   Map<String, dynamic> toMap() {
@@ -54,9 +52,10 @@ class CallsSensorConfig extends AwareSensorConfig{
 
 /// Make an AwareWidget
 class CallsCard extends StatefulWidget {
-  CallsCard({Key key, @required this.sensor}) : super(key: key);
+  CallsCard({Key key, @required this.sensor, this.cardId="calls_card"}) : super(key: key);
 
   CallsSensor sensor;
+  String cardId;
 
   @override
   CallsCardState createState() => new CallsCardState();
@@ -73,7 +72,7 @@ class CallsCardState extends State<CallsCard> {
 
     super.initState();
     // set observer
-    widget.sensor.onCall.listen((event) {
+    widget.sensor.onCall(widget.cardId+"_on_call").listen((event) {
       setState((){
         if(event!=null){
           DateTime.fromMicrosecondsSinceEpoch(event['timestamp']);
@@ -86,19 +85,19 @@ class CallsCardState extends State<CallsCard> {
     });
     print(widget.sensor);
 
-    widget.sensor.onBusy.listen((event){
+    widget.sensor.onBusy(widget.cardId+"_on_busy").listen((event){
       setState(() {
         state = "State: on busy";
       });
     });
 
-    widget.sensor.onFree.listen((event){
+    widget.sensor.onFree(widget.cardId+"_on_free").listen((event){
       setState(() {
         state = "State: on free";
       });
     });
 
-    widget.sensor.onRinging.listen((event){
+    widget.sensor.onRinging(widget.cardId+"_on_ringing").listen((event){
       setState(() {
         state = "State: on ringing";
       });
@@ -116,6 +115,16 @@ class CallsCardState extends State<CallsCard> {
       title: "Calls",
       sensor: widget.sensor
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    widget.sensor.cancelBroadcastStream(widget.cardId+"_on_call");
+    widget.sensor.cancelBroadcastStream(widget.cardId+"_on_busy");
+    widget.sensor.cancelBroadcastStream(widget.cardId+"_on_free");
+    widget.sensor.cancelBroadcastStream(widget.cardId+"_on_ringing");
+    super.dispose();
   }
 
 }
