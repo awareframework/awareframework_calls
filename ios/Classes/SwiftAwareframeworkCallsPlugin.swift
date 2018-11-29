@@ -1,6 +1,5 @@
 import Flutter
 import UIKit
-import SwiftyJSON
 import com_awareframework_ios_sensor_calls
 import com_awareframework_ios_sensor_core
 import awareframework_core
@@ -10,8 +9,7 @@ public class SwiftAwareframeworkCallsPlugin: AwareFlutterPluginCore, FlutterPlug
     public func initializeSensor(_ call: FlutterMethodCall, result: @escaping FlutterResult) -> AwareSensor? {
         if self.sensor == nil {
             if let config = call.arguments as? Dictionary<String,Any>{
-                let json = JSON.init(config)
-                self.callsSensor = CallsSensor.init(CallsSensor.Config(json))
+                self.callsSensor = CallsSensor.init(CallsSensor.Config(config))
             }else{
                 self.callsSensor = CallsSensor.init(CallsSensor.Config())
             }
