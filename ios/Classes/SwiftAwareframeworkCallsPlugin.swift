@@ -42,7 +42,7 @@ public class SwiftAwareframeworkCallsPlugin: AwareFlutterPluginCore, FlutterPlug
     }
 
     
-    public func onCall(data: CallData) {
+    public func onCall(data: CallsData) {
         for handler in self.streamHandlers {
             if handler.eventName == "on_call" {
                 handler.eventSink(data.toDictionary())

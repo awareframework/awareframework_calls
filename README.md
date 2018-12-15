@@ -1,6 +1,8 @@
 # Aware Calls
 
-TODO
+[![Build Status](https://travis-ci.com/awareframework/awareframework_calls.svg?branch=master)](https://travis-ci.com/awareframework/awareframework_calls)
+
+The Calls sensor logs call events performed by or received by the user. It also provides higher level context on the users’ calling availability and actions.
 
 ## Install the plugin into project
 1. Edit `pubspec.yaml`
@@ -19,10 +21,11 @@ import 'package:awareframework_core/awareframework_core.dart';
 ### calls Sensor
 - `start()`
 - `stop()` 
-- `sync(force: Boolean)`
+- `sync(bool force)`
 - `enable()`
 - `disable()`
 - `isEnable()`
+- `setLabel(String label)`
 
 ### Configuration Keys
 TODO
@@ -50,14 +53,14 @@ var config = CallsSensorConfig()
   ..label = "label";
 
 // init sensor
-var sensor = new CallsSensor(config);
+var sensor = new CallsSensor.init(config);
 
-void mathod(){
+void method(){
     /// start 
     sensor.start();
     
     /// set observer
-    sensor.onDataChanged.listen((Map<String,dynamic> result){
+    sensor.onDataChanged.listen((CallsData result){
       setState((){
         // Your code here
       });

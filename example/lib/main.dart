@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
     config = CallsSensorConfig()
       ..debug = true;
 
-    sensor = new CallsSensor(config);
+    sensor = new CallsSensor.init(config);
 
     sensor.start();
 
