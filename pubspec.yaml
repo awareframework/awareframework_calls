@@ -1,7 +1,7 @@
 name: awareframework_calls
-description: A new flutter plugin project.
+description: The Calls sensor logs call events performed by or received by the user.
 version: 0.0.4
-author: AWARE Mobile Context Instrumentation Middleware Framework
+author: AWARE Mobile Context Instrumentation Middleware Framework <yuuki.nishiyama@oulu.fi>
 homepage: http://www.awareframework.com
 
 environment:

@@ -48,7 +48,7 @@ import 'package:flutter/material.dart';
 /// ```
 class CallsSensor extends AwareSensor {
   static const MethodChannel _callsMethod = const MethodChannel('awareframework_calls/method');
-  static const EventChannel  _callsStream  = const EventChannel('awareframework_calls/event');
+//  static const EventChannel  _callsStream  = const EventChannel('awareframework_calls/event');
 
   static const EventChannel  _onCallStream  = const EventChannel('awareframework_calls/event_on_call');
   static const EventChannel  _onRingingStream  = const EventChannel('awareframework_calls/event_on_ringing');
