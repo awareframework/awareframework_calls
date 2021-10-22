@@ -68,7 +68,7 @@ class CallsSensor extends AwareSensor {
   /// ```dart
   /// var sensor = CallsSensor.init(null);
   /// ```
-  CallsSensor():this.init(null);
+  // CallsSensor():this(null);
 
 
   /// Init Calls Sensor with CallsSensorConfig
@@ -196,8 +196,8 @@ class CallsData extends AwareData {
   int type = -1;
   int duration = 0;
   String trace = "";
-  CallsData():this.from(null);
-  CallsData.from(Map<String,dynamic> data):super.from(data){
+  CallsData():this.from({});
+  CallsData.from(Map<String,dynamic> data):super(data){
     if (data != null) {
       eventTimestamp = data["eventTimestamp"] ?? 0;
       type = data["type"] ?? -1;
@@ -207,81 +207,3 @@ class CallsData extends AwareData {
   }
 }
 
-///
-/// A Card Widget of Calls Sensor
-///
-/// You can generate a Cart Widget by following code.
-/// ```dart
-/// var card = CallsCard(sensor: sensor);
-/// ```
-class CallsCard extends StatefulWidget {
-  CallsCard({Key key, @required this.sensor}) : super(key: key);
-
-  final CallsSensor sensor;
-
-  @override
-  CallsCardState createState() => new CallsCardState();
-}
-
-
-class CallsCardState extends State<CallsCard> {
-
-  String state = "";
-  String callInfo = "Call Info: --- ";
-
-  @override
-  void initState() {
-
-    super.initState();
-
-    setState((){
-        state = "";
-        callInfo = "Call Info: ${widget.sensor.callEvent.trace}";
-    });
-
-    /// Phone call events
-    widget.sensor.onCall.listen((event) {
-      setState((){
-        if(event!=null){
-          DateTime.fromMicrosecondsSinceEpoch(event.timestamp);
-          state = "State: on call";
-          callInfo = "Call Info: $event";
-        }
-      });
-    }, onError: (dynamic error) {
-        print('Received error: ${error.message}');
-    });
-    print(widget.sensor);
-
-    widget.sensor.onBusy.listen((event){
-      setState(() {
-        state = "State: on busy";
-      });
-    });
-
-    widget.sensor.onFree.listen((event){
-      setState(() {
-        state = "State: on free";
-      });
-    });
-
-    widget.sensor.onRinging.listen((event){
-      setState(() {
-        state = "State: on ringing";
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new AwareCard(
-      contentWidget: SizedBox(
-          width: MediaQuery.of(context).size.width*0.8,
-          child: new Text("$state\n$callInfo"),
-        ),
-      title: "Calls",
-      sensor: widget.sensor
-    );
-  }
-
-}
